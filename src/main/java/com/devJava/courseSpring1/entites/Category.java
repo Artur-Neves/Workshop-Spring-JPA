@@ -5,11 +5,14 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import org.hibernate.annotations.ManyToAny;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 @Entity
 public class Category implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -17,7 +20,8 @@ public class Category implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String name;
-	@Transient
+	@ManyToAny
+	@JoinTable (name = "tb_category_product", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
 	private Set<Product> products = new HashSet<>();
 	public Category(long id, String name) {
 		super();

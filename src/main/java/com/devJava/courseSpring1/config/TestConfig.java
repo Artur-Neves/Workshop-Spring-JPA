@@ -11,9 +11,11 @@ import org.springframework.context.annotation.Profile;
 import com.devJava.courseSpring1.Enums.OrderStatus;
 import com.devJava.courseSpring1.entites.Category;
 import com.devJava.courseSpring1.entites.Order;
+import com.devJava.courseSpring1.entites.OrderItem;
 import com.devJava.courseSpring1.entites.Product;
 import com.devJava.courseSpring1.entites.User;
 import com.devJava.courseSpring1.repositories.CategoryRepository;
+import com.devJava.courseSpring1.repositories.OrderItemRepository;
 import com.devJava.courseSpring1.repositories.OrderRepository;
 import com.devJava.courseSpring1.repositories.ProductRepository;
 import com.devJava.courseSpring1.repositories.UserRepository;
@@ -31,6 +33,8 @@ public class TestConfig implements CommandLineRunner {
 	private CategoryRepository categoryRepository;
 	@Autowired
 	private ProductRepository productRepository;
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 	// basicamente esse código vai executar assim que o programa rodar
 	@Override
 	public void run(String... args) throws Exception {
@@ -53,5 +57,15 @@ public class TestConfig implements CommandLineRunner {
 		Order o3 = new Order( Instant.parse("2019-07-22T15:21:22Z"),OrderStatus.WAITING_PAMENT, u1);
 	    orderRepository.saveAll(Arrays.asList(o1, o2, o3));
 	    
+	    cat1.getProducts().add(p2);
+	    cat2.getProducts().addAll(Arrays.asList(p1, p5));
+	    cat3.getProducts().addAll(Arrays.asList(p2, p3, p4));
+	    categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
+	    
+	    OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice());
+	    OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getPrice());
+	    OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice());
+	    OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
+        orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));	
 	}
 }

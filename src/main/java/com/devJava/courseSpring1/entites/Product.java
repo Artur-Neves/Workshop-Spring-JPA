@@ -5,12 +5,15 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 @Entity
 @Table(name = "tb_product")
 public class Product implements Serializable {
@@ -23,8 +26,11 @@ public class Product implements Serializable {
 	private Double price;
 	private String imgUrl;
 	// usamos o Set para por conta dele não permitir a repetição de valores
-	@Transient
+	@JsonIgnore
+	@ManyToMany(mappedBy = "products")
 	private Set<Category> categories = new HashSet<>();
+	@OneToMany(mappedBy = "id.product")
+	private Set<OrderItem> orders = new HashSet<>();
 	public Product(long id, String name, String descriprion, Double price, String imgUrl) {
 		super();
 		this.id = id;
@@ -72,6 +78,10 @@ public class Product implements Serializable {
 	}
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
+	}
+	
+	public Set<OrderItem> getOrders() {
+		return orders;
 	}
 	@Override
 	public int hashCode() {
